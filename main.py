@@ -1,24 +1,25 @@
 from classes.game import Person, bcolors
 from classes.magic import Spell
 from classes.inventory import Item
+import random
 
 
 # Cast Elemental Magic
-fire = Spell("Fire", 10, 101, "elemental")
-thunder = Spell("Thunder", 8, 80, "elemental")
-blizzard = Spell("Blizzard", 10, 101, "elemental")
-lightning = Spell("Lightning", 14, 150, "elemental")
-meteor = Spell("Meteor", 20, 200, "elemental")
+fire = Spell("Fire", 25, 650, "elemental")
+thunder = Spell("Thunder", 20, 480, "elemental")
+blizzard = Spell("Blizzard", 25, 650, "elemental")
+lightning = Spell("Lightning", 40, 900, "elemental")
+meteor = Spell("Meteor", 14, 1200, "elemental")
 
 # Cast Divine Magic
-healing = Spell("Healing", 15, 120, "divine")
-major_healing = Spell("Major Healing", 20, 180, "divine")
+healing = Spell("Healing", 15, 520, "divine")
+major_healing = Spell("Major Healing", 20, 1200, "divine")
 
 
 # Create some Items
 potion = Item("Potion", "potion", "Heals 50 HP", 50)
 hi_potion = Item("Hi-Potion", "potion", "Heals 100 HP", 100)
-super_potion = Item("Super Potion", "potion", "Heals 500 HP", 500)
+super_potion = Item("Super Potion", "potion", "Heals 500 HP", 1000)
 elixir = Item("Elixir", "elixir", "Fully restores HP/MP of one party member", 9999)
 super_elixir = Item("Super Elixir", "elixir", "Fully restores party's HP/MP", 9999)
 
@@ -31,10 +32,10 @@ player_items = [{"item": potion, "quantity": 15}, {"item": hi_potion, "quantity"
                 {"item": super_elixir, "quantity": 1}, {"item": dragon_fire, "quantity": 1}]
 
 # Instantiate People
-player1 = Person("Valos: ", 3300, 65, 60, 34, player_spells, player_items)
-player2 = Person("Kirie: ", 4190, 65, 60, 34, player_spells, player_items)
-player3 = Person("Irile: ", 3030, 65, 60, 34, player_spells, player_items)
-enemy = Person("Irikesh", 1200, 65, 45, 25, [], [])
+player1 = Person("Valos: ", 3300, 145, 300, 34, player_spells, player_items)
+player2 = Person("Kirie: ", 4190, 190, 315, 34, player_spells, player_items)
+player3 = Person("Irile: ", 3030, 176, 260, 34, player_spells, player_items)
+enemy = Person("Darklord", 12000, 700, 530, 25, [], [])
 
 players = [player1, player2, player3]
 
@@ -52,6 +53,8 @@ while running:
         player.get_stats()
 
     print("\n")
+
+    enemy.get_enemy_stats()
 
     for player in players:
 
@@ -106,16 +109,24 @@ while running:
                 player.heal(item.prop)
                 print(bcolors.OKGREEN + "\n" + item.name + " heals for", str(item.prop), "HP" + bcolors.ENDC)
             elif item.type == "elixir":
-                player.hp = player.maxhp
-                player.mp = player.maxmp
+
+                if item.name == "Super Elixir":
+                    for i in players:
+                        i.hp = i.maxhp
+                        i.mp = i.maxmp
+                else:
+                    player.hp = player.maxhp
+                    player.mp = player.maxmp
                 print(bcolors.OKGREEN + "\n" + item.name + " fully restores HP/MP" + bcolors.ENDC)
             elif item.type == "attack":
                 enemy.take_damage(item.prop)
                 print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop), "points of damage"+ bcolors.ENDC)
-    enemy.choice = 1
 
+    enemy.choice = 1
+    target = random.randrange(0,3)
     enemy_dmg = enemy.generate_damage()
-    player1.take_damage(enemy_dmg)
+
+    players[target].take_damage(enemy_dmg)
     print("Enemy attacks you for", enemy_dmg)
 
     print("~~~~~~~~~~~~~~")
