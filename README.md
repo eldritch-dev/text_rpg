@@ -1,4 +1,4 @@
-RPG Battle System
+Text Based RPG Battle Game
 
-Attack, cast spells and more on this amazing terminal text
-based RPG game!
+Attack, cast spells and more on this amazing text based 
+RPG game!
